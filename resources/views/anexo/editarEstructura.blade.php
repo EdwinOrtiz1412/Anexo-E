@@ -1,13 +1,8 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Estructura del Cuadro: ') . $cuadro->titulo }}
-        </h2>
-    </x-slot>
+@extends('layouts.administrador')
 
+@section('title', 'Estructura del cuadro')
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
+@section('styles')
     <style>
         body {
             background-color: #f9fafb;
@@ -39,7 +34,6 @@
         /* Cards */
         .card-header {
             background: linear-gradient(90deg, #111827, #374151);
-            /* Gris institucional */
             color: white;
             font-weight: 600;
             border-radius: .5rem .5rem 0 0;
@@ -66,10 +60,9 @@
             box-shadow: 0 0 0 0.2rem rgba(55, 65, 81, .25);
         }
 
-        /*  Botones estilo administrativo */
+        /* Botones */
         .btn-fila {
             background-color: #6B7280;
-            /* Gris pizarra */
             color: #fff;
             border: none;
         }
@@ -80,7 +73,6 @@
 
         .btn-columna {
             background-color: #4B5563;
-            /* Gris acero */
             color: #fff;
             border: none;
         }
@@ -91,7 +83,6 @@
 
         .btn-guardar {
             background-color: #374151;
-            /* Gris grafito */
             color: #fff;
             border: none;
         }
@@ -102,7 +93,6 @@
 
         .btn-volver {
             background-color: #9CA3AF;
-            /* Gris claro */
             color: #fff;
             border: none;
         }
@@ -119,20 +109,20 @@
             background-color: #4B5563 !important;
         }
     </style>
-
+@endsection
+@section('content')
     <div class="py-4">
         <div class="container-fluid">
-            <div class="text-right">
+            <div class="text-end mb-3">
                 <a href="{{ route('anexo.cuadros.listar') }}" class="btn btn-volver">
-                    <i class="fas fa-arrow-left"></i> Volver
+                    <i class="bi bi-arrow-left"></i> Volver
                 </a>
             </div>
 
-
-            <!-- Card de información -->
+            <!-- Card Información -->
             <div class="card shadow mb-4">
                 <div class="card-header">
-                    <i class="fas fa-info-circle"></i> Información del Cuadro
+                    <i class="bi bi-info-circle"></i> Información del Cuadro
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -143,12 +133,12 @@
                 </div>
             </div>
 
-            <!-- Card de Filas -->
+            <!-- Card Filas -->
             <div class="card shadow mb-4">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <span><i class="fas fa-stream"></i> Filas</span>
-                    <button class="btn btn-sm btn-fila" data-toggle="modal" data-target="#modalAgregarFila">
-                        <i class="fas fa-plus"></i> Agregar Fila
+                    <span><i class="bi bi-stream"></i> Filas</span>
+                    <button class="btn btn-sm btn-fila" data-bs-toggle="modal" data-bs-target="#modalAgregarFila">
+                        <i class="bi bi-plus-lg"></i> Agregar Fila
                     </button>
                 </div>
                 <div class="card-body">
@@ -181,13 +171,11 @@
                                             <input type="number" class="form-control form-control-sm text-center"
                                                 value="{{ $fila->orden }}">
                                         </td>
-
-                                        <!-- Botón eliminar -->
                                         <td class="text-center">
                                             <button class="btn btn-danger btn-sm rounded-circle"
                                                 onclick="eliminarFila({{ $cuadro->idCuadro }}, {{ $fila->idFila }})"
                                                 title="Eliminar fila">
-                                                <i class="fa-solid fa-trash"></i>
+                                                <i class="bi bi-trash"></i>
                                             </button>
                                         </td>
                                     </tr>
@@ -198,12 +186,12 @@
                 </div>
             </div>
 
-            <!-- Card de Columnas -->
+            <!-- Card Columnas -->
             <div class="card shadow mb-4">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <span><i class="fas fa-columns"></i> Columnas</span>
-                    <button class="btn btn-sm btn-columna" data-toggle="modal" data-target="#modalAgregarColumna">
-                        <i class="fas fa-plus"></i> Agregar Columna
+                    <span><i class="bi bi-layout-three-columns"></i> Columnas</span>
+                    <button class="btn btn-sm btn-columna" data-bs-toggle="modal" data-bs-target="#modalAgregarColumna">
+                        <i class="bi bi-plus-lg"></i> Agregar Columna
                     </button>
                 </div>
 
@@ -226,91 +214,59 @@
                                     {
                                         foreach ($columnas->where('idColumnaPadre', $padreId)->sortBy('orden') as $col) {
                                             echo '<tr id="columna-' . $col->idColumna . '">';
-
-                                            echo '<td class="text-center align-middle">
-                                                                                                                                                                                                                            <small class="text-muted">' . $col->idColumna . '</small>
-                                                                                                                                                                                                                          </td>';
-
-                                            echo '<td>
-                                                                                                                                                                                                                            <input type="text" 
-                                                                                                                                                                                                                                   class="form-control form-control-sm nivel-' . $col->nivel . '" 
-                                                                                                                                                                                                                                   style="margin-left:' . (($nivel - 1) * 25) . 'px; 
-                                                                                                                                                                                                                                          font-weight:' . ($col->idColumnaPadre ? 'normal' : 'bold') . '"
-                                                                                                                                                                                                                                   value="' . e($col->nombreColumna) . '">
-                                                                                                                                                                                                                          </td>';
-
-                                            echo '<td>
-                                                                                                                                                                                                                            <select class="form-control form-control-sm">';
-                                            echo '<option value="">— Ninguno —</option>';
+                                            echo '<td class="text-center align-middle"><small class="text-muted">' . $col->idColumna . '</small></td>';
+                                            echo '<td><input type="text" class="form-control form-control-sm nivel-' . $col->nivel . '" style="margin-left:' . (($nivel - 1) * 25) . 'px; font-weight:' . ($col->idColumnaPadre ? 'normal' : 'bold') . '" value="' . e($col->nombreColumna) . '"></td>';
+                                            echo '<td><select class="form-select form-select-sm"><option value="">— Ninguno —</option>';
                                             foreach ($columnas as $p) {
                                                 if ($p->idColumna != $col->idColumna) {
                                                     $selected = $col->idColumnaPadre == $p->idColumna ? 'selected' : '';
                                                     echo '<option value="' . $p->idColumna . '" ' . $selected . '>' . e($p->nombreColumna) . '</option>';
                                                 }
                                             }
-                                            echo '</select>
-                                                                                                                                                                                                                          </td>';
-
-                                            echo '<td class="text-center">
-                                                                                                                                                                                                                            <input type="number" class="form-control form-control-sm text-center" 
-                                                                                                                                                                                                                                   value="' . $col->nivel . '" readonly>
-                                                                                                                                                                                                                          </td>';
-
-                                            echo '<td>
-                                                                                                                                                                                                                            <input type="number" class="form-control form-control-sm text-center" 
-                                                                                                                                                                                                                                   value="' . $col->orden . '">
-                                                                                                                                                                                                                          </td>';
-
-                                            echo '<td class="text-center">
-                                                                                                                                                                                                                            <button class="btn btn-danger btn-sm rounded-circle"
-                                                                                                                                                                                                                                    onclick="eliminarColumna(' . $cuadroId . ', ' . $col->idColumna . ')"
-                                                                                                                                                                                                                                    title="Eliminar columna">
-                                                                                                                                                                                                                                <i class="fa-solid fa-trash"></i>
-                                                                                                                                                                                                                            </button>
-                                                                                                                                                                                                                          </td>';
-
+                                            echo '</select></td>';
+                                            echo '<td class="text-center"><input type="number" class="form-control form-control-sm text-center" value="' . $col->nivel . '" readonly></td>';
+                                            echo '<td><input type="number" class="form-control form-control-sm text-center" value="' . $col->orden . '"></td>';
+                                            echo '<td class="text-center"><button class="btn btn-danger btn-sm rounded-circle" onclick="eliminarColumna(' . $cuadroId . ', ' . $col->idColumna . ')" title="Eliminar columna"><i class="bi bi-trash"></i></button></td>';
                                             echo '</tr>';
-
-                                            // Recursión para las subcolumnas
                                             renderColumnasEditable($columnas, $col->idColumna, $nivel + 1, $cuadroId);
                                         }
                                     }
                                 @endphp
-
                                 @php renderColumnasEditable($columnas, null, 1, $cuadro->idCuadro); @endphp
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-            <!-- Botones de acción -->
-            <div class="text-right">
+
+            <!-- Botón Guardar -->
+            <div class="text-end">
                 <button class="btn btn-guardar" onclick="guardarEstructura()">
-                    <i class="fas fa-save"></i> Guardar Estructura
+                    <i class="bi bi-save"></i> Guardar Estructura
                 </button>
             </div>
-
         </div>
     </div>
 
-    <!--  Agregar Fila -->
-    <div class="modal fade" id="modalAgregarFila" tabindex="-1">
+    <!-- Modal Agregar Fila -->
+    <div class="modal fade" id="modalAgregarFila" tabindex="-1" aria-labelledby="modalAgregarFilaLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-fila text-white">
-                    <h5 class="modal-title"><i class="fas fa-plus"></i> Agregar Fila</h5>
-                    <button type="button" class="close text-white" data-dismiss="modal"><span>&times;</span></button>
+                    <h5 class="modal-title" id="modalAgregarFilaLabel"><i class="bi bi-plus-lg"></i> Agregar Fila</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
                 </div>
                 <form id="formAgregarFila">
                     <div class="modal-body">
                         <input type="hidden" name="idCuadro" value="{{ $cuadro->idCuadro }}">
-                        <div class="form-group">
-                            <label>Nombre de la Fila</label>
+                        <div class="mb-3">
+                            <label class="form-label">Nombre de la Fila</label>
                             <input type="text" name="nombreFila" class="form-control" required>
                         </div>
-                        <div class="form-group">
-                            <label>Nivel</label>
-                            <select name="nivel" class="form-control">
+                        <div class="mb-3">
+                            <label class="form-label">Nivel</label>
+                            <select name="nivel" class="form-select">
                                 <option value="1">Nivel 1</option>
                                 <option value="2">Nivel 2</option>
                                 <option value="3">Nivel 3</option>
@@ -319,46 +275,44 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-fila" onclick="agregarFila()">Guardar</button>
-                        <button type="button" class="btn btn-volver" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-fila" onclick="agregarFila()">
+                            <i class="bi bi-save"></i> Guardar
+                        </button>
+                        <button type="button" class="btn btn-volver" data-bs-dismiss="modal">
+                            <i class="bi bi-x-lg"></i> Cancelar
+                        </button>
                     </div>
-
                 </form>
-
             </div>
         </div>
     </div>
 
-    <!-- Modal: Agregar Columna -->
-    <div class="modal fade" id="modalAgregarColumna" tabindex="-1">
+    <!-- Modal Agregar Columna -->
+    <div class="modal fade" id="modalAgregarColumna" tabindex="-1" aria-labelledby="modalAgregarColumnaLabel"
+        aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-columna text-white">
-                    <h5 class="modal-title">
-                        <i class="fas fa-plus"></i> Agregar Columna
+                    <h5 class="modal-title" id="modalAgregarColumnaLabel">
+                        <i class="bi bi-plus-lg"></i> Agregar Columna
                     </h5>
-                    <button type="button" class="close text-white" data-dismiss="modal">
-                        <span>&times;</span>
-                    </button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
                 </div>
 
                 <form id="formAgregarColumna">
                     <div class="modal-body">
                         <input type="hidden" name="idCuadro" value="{{ $cuadro->idCuadro }}">
-
-                        <div class="form-group">
-                            <label>Nombre de la Columna</label>
+                        <div class="mb-3">
+                            <label class="form-label">Nombre de la Columna</label>
                             <input type="text" name="nombreColumna" class="form-control" required>
                         </div>
-
-                        <div class="form-group">
-                            <label>Columna Padre (opcional)</label>
-                            <select name="idColumnaPadre" class="form-control">
+                        <div class="mb-3">
+                            <label class="form-label">Columna Padre (opcional)</label>
+                            <select name="idColumnaPadre" class="form-select">
                                 <option value="">— Ninguna —</option>
                                 @foreach ($columnas as $posiblePadre)
-                                    <option value="{{ $posiblePadre->idColumna }}">
-                                        {{ $posiblePadre->nombreColumna }}
-                                    </option>
+                                    <option value="{{ $posiblePadre->idColumna }}">{{ $posiblePadre->nombreColumna }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -366,25 +320,21 @@
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-columna" onclick="agregarColumna()">
-                            <i class="fas fa-save"></i> Guardar
+                            <i class="bi bi-save"></i> Guardar
                         </button>
-                        <button type="button" class="btn btn-volver" data-dismiss="modal">
-                            Cancelar
+                        <button type="button" class="btn btn-volver" data-bs-dismiss="modal">
+                            <i class="bi bi-x-lg"></i> Cancelar
                         </button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+@endsection
 
 
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://kit.fontawesome.com/a2e0e9b6d3.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
+@section('scripts')
 
     <script>
         function agregarFila() {
@@ -430,8 +380,8 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: "/cuadros/" + idCuadro + "/filas/" + idFila,
-                        type: "DELETE",
+                        url: `/cuadros/${idCuadro}/filas/${idFila}`,
+                        type: 'DELETE',
                         headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
                         success: function (response) {
                             Swal.fire({
@@ -441,7 +391,7 @@
                                 timer: 2000,
                                 showConfirmButton: false
                             });
-                            $("#fila-" + idFila).remove();
+                            $(`#fila-${idFila}`).fadeOut(400, function () { $(this).remove(); });
                         },
                         error: function (xhr) {
                             Swal.fire({
@@ -454,6 +404,7 @@
                 }
             });
         }
+
 
         function agregarColumna() {
             let formData = $("#formAgregarColumna").serialize();
@@ -496,7 +447,7 @@
         function eliminarColumna(idCuadro, idColumna) {
             Swal.fire({
                 title: '¿Estás seguro?',
-                text: "Esta acción eliminará la columna y todas sus subcolumnas.",
+                text: "Esta acción eliminará la columna seleccionada.",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#d33',
@@ -506,33 +457,43 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: "/cuadros/" + idCuadro + "/columnas/" + idColumna,
-                        type: "DELETE",
+                        url: `/cuadros/${idCuadro}/columnas/${idColumna}`,
+                        type: 'DELETE',
                         headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
                         success: function (response) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Eliminada',
-                                text: response.message,
-                                timer: 2000,
-                                showConfirmButton: false
-                            });
-
-                            $("#columna-" + idColumna).fadeOut(400, function () {
-                                $(this).remove();
-                            });
+                            if (response.success) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Eliminada',
+                                    text: response.message,
+                                    timer: 2000,
+                                    showConfirmButton: false
+                                });
+                                $(`#columna-${idColumna}`).fadeOut(400, function () { $(this).remove(); });
+                            } else {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    title: 'No se puede eliminar',
+                                    text: response.message
+                                });
+                            }
                         },
                         error: function (xhr) {
+                            let msg = 'No se pudo eliminar la columna.';
+                            if (xhr.status === 409 || xhr.status === 404) {
+                                msg = xhr.responseJSON?.message || msg;
+                            }
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Error',
-                                text: xhr.responseJSON?.message || 'No se pudo eliminar la columna'
+                                text: msg
                             });
                         }
                     });
                 }
             });
         }
+
 
         function guardarEstructura() {
             let idCuadro = "{{ $cuadro->idCuadro }}";
@@ -607,4 +568,4 @@
 
     </script>
 
-</x-app-layout>
+@endsection

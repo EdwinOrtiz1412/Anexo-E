@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->integer('control');
             $table->string('numero',10);
             $table->string('titulo', 500);
-            $table->string('descripcion')->nullable();
+            // $table->string('descripcion')->nullable();
             $table->integer('idEjePED');
             $table->integer('idTemaPED');
             $table->integer('idDependencia');

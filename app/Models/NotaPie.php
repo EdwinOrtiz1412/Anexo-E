@@ -13,7 +13,7 @@ class NotaPie extends Model
     protected $fillable = [
         'idCuadro',
         'idCategoria',
-        'idDependencia',
+        'fuente',
         'texto',
         'orden',
     ];

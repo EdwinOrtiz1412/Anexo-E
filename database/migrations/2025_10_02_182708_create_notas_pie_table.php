@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->id('idNotaPie');
             $table->unsignedBigInteger('idCuadro');
             $table->unsignedBigInteger('idCategoria')->nullable();
-            $table->integer('idDependencia')->nullable();
+            $table->string('fuente', 300)->nullable();
             $table->text('texto');
             $table->integer('orden')->default(1);
 
@@ -27,13 +27,7 @@ return new class extends Migration {
             $table->foreign('idCategoria')
                 ->references('idCategoria')->on('categorias')
                 ->nullOnDelete();
-
-            $table->foreign('idDependencia')
-                ->references('idDependencia')->on('dependencia')
-                ->nullOnDelete();
         });
-
-
     }
 
     /**

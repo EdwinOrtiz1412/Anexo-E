@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('idCategoria');
             $table->string('nombre',200);
             $table->text('descripcion');
-            $table->year('anio');
+            $table->integer('anio')->unsigned()->nullable(false);
             $table->unsignedInteger('idGrupo')->nullable();
             $table->foreign('idGrupo')->references('idGrupo')->on('grupos')->onDelete('set null');
 

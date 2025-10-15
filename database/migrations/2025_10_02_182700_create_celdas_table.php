@@ -16,8 +16,9 @@ return new class extends Migration {
             $table->unsignedBigInteger('idFila');
             $table->unsignedBigInteger('idColumna');
             $table->unsignedBigInteger('idCategoria');
-            $table->unsignedBigInteger('user_id');
-            $table->decimal('valor_numero', 20, 6);
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->string('valor_numero', 50)->nullable();
+
             $table->timestamps();
 
             $table->unique(['idCuadro', 'idFila', 'idColumna', 'idCategoria']);
